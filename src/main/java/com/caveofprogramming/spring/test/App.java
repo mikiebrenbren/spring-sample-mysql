@@ -3,6 +3,7 @@ package com.caveofprogramming.spring.test;
 import com.caveofprogramming.spring.test.model.Offer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.dao.DataAccessException;
 
 import java.util.List;
 
@@ -14,11 +15,22 @@ public class App {
 
         OffersDAO offersDAO = (OffersDAO) context.getBean("offersdao");
 
-        List<Offer> offers = offersDAO.getOffers();
+        try{
+            List<Offer> offers = offersDAO.getOffers();
 
-        for(Offer offer : offers){
-            System.out.println(offer);
+            for(Offer offer : offers){
+                System.out.println(offer);
+            }
+        }catch(DataAccessException e){
+            System.out.println(e.getMessage());
         }
+
+        Offer offer = offersDAO.getOffer(2);
+        System.out.println(offer);
+
+        boolean offer1 = offersDAO.delete(4);
+        System.out.println(offer);
+
 
                 ((ClassPathXmlApplicationContext) context).close();
 	}
