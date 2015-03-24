@@ -12,13 +12,11 @@ public class App {
 	public static void main(String[] args) {
 		
 		ApplicationContext context = new ClassPathXmlApplicationContext("beans.xml");
-
         OffersDAO offersDAO = (OffersDAO) context.getBean("offersdao");
 
         //getting multiple offers from the database
         try{
             List<Offer> offers = offersDAO.getOffers();
-
             for(Offer offer : offers){
                 System.out.println(offer);
             }
@@ -32,7 +30,9 @@ public class App {
 
         //deleting an offer from the database
         boolean offer1 = offersDAO.delete(4);
-        System.out.println(offer);
+        if(offer1) {
+            System.out.println("Deleted an offer");
+        }
 
         //creating a new row in the database
         boolean offer2 = offersDAO.create(new Offer("Mike", "mike@joe.com", "I code cool stuff in java"));
@@ -46,8 +46,6 @@ public class App {
         if(offer4){
             System.out.println("Offers updated");
         }
-
-
                 ((ClassPathXmlApplicationContext) context).close();
 	}
 

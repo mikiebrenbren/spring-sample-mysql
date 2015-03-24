@@ -42,7 +42,6 @@ public class OffersDAO {
             public Offer mapRow(ResultSet resultSet, int i) throws SQLException {
 
                 Offer offer = new Offer();
-
                 offer.setId(resultSet.getInt("id"));
                 offer.setName(resultSet.getString("name"));
                 offer.setEmail(resultSet.getString("email"));
@@ -51,8 +50,6 @@ public class OffersDAO {
             }
         });
     }
-
-
 
     public Offer getOffer(int id){
 
@@ -67,7 +64,6 @@ public class OffersDAO {
             public Offer mapRow(ResultSet resultSet, int i) throws SQLException {
 
                 Offer offer = new Offer();
-
                 offer.setId(resultSet.getInt("id"));
                 offer.setName(resultSet.getString("name"));
                 offer.setEmail(resultSet.getString("email"));
