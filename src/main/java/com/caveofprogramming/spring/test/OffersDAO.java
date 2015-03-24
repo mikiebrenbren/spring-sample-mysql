@@ -3,6 +3,7 @@ package com.caveofprogramming.spring.test;
 import com.caveofprogramming.spring.test.model.Offer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.List;
 public class OffersDAO {
 
     private NamedParameterJdbcTemplate jdbcTemplate;
+    private MapSqlParameterSource mapSqlParameterSource;
 
     /*
     I think that this autowires the DataSource into the method
@@ -30,7 +32,7 @@ public class OffersDAO {
 //    This returns a list of offers
     public List<Offer> getOffers(){
 
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+         mapSqlParameterSource = new MapSqlParameterSource();
 
         //I think that this rowmapper creates adds an offer to the list ie it adds a row to the list
         //for every row that is in the query
@@ -50,9 +52,11 @@ public class OffersDAO {
         });
     }
 
+
+
     public Offer getOffer(int id){
 
-        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("id", id);
 
         //I think that this rowmapper creates adds an offer to the list ie it adds a row to the list
@@ -85,8 +89,23 @@ public class OffersDAO {
      */
 
     public boolean delete(int id){
-        MapSqlParameterSource params = new MapSqlParameterSource("id", id);
+        mapSqlParameterSource = new MapSqlParameterSource("id", id);
         //mind the spaces in the sql statements
-       return jdbcTemplate.update("delete from offers where id =:id", params) ==1;
+       return jdbcTemplate.update("delete from offers where id =:id", mapSqlParameterSource) == 1;
+    }
+
+
+    //creating a row in the database
+    public boolean create(Offer offer){
+        BeanPropertySqlParameterSource beanPropertySqlParameterSource = new BeanPropertySqlParameterSource(offer);
+        return jdbcTemplate.update("insert into offers (name, text, email) values (:name, :text, :email)", beanPropertySqlParameterSource) == 1;
+
+    }
+
+    //creating a row in the database
+    public boolean update(Offer offer){
+        BeanPropertySqlParameterSource beanPropertySqlParameterSource = new BeanPropertySqlParameterSource(offer);
+        return jdbcTemplate.update("update offers set name=:name, text=:text, email=:email where id=:id", beanPropertySqlParameterSource) == 1;
+
     }
 }
